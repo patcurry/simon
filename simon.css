@@ -1,13 +1,21 @@
 body {
     background: grey;
+    margin: 2rem;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
+
+/* How do I make this responsive? It should fit on phone screens, right now it does not. Start with the js code, then
+ * work on making it the right size
+ */
+
 #circle-container {
     width: 400px;
     height: 400px;
     position: relative;
+    border-radius: 211px;
+    border: solid 10px;
 }
-
+/* account for the 5px borders by making the width and height 190px instead of 200px */
 .quarter {
     width: 190px;
     height: 190px;
