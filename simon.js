@@ -8,16 +8,34 @@ function toggleButtonColor(el) {
     el.classList.toggle('light');
 }
 
-// I need to have a button that adds elements to a list
-// then that list can be checked against the random button list
+// pulled this off stack overflow
+// also checks array order
+function arraysEqual(_arr1, _arr2) {
 
-// does this need to be a function?
-// no
-/*
-function addButtonToListOnPress(b, arr) {
-    return arr.push(b);
+    // looks like if array 1 is not an array, or array 2 is not an array, or if array 1 length
+    // is not equal to array two length, return false
+    if (!Array.isArray(_arr1) || ! Array.isArray(_arr2) || _arr1.length !== _arr2.length)
+      return false;
+
+    // new array 1 = array1 concatenated and sorted... I do not understand why this is happening
+    
+    var arr1 = _arr1.concat().sort();
+    var arr2 = _arr2.concat().sort();
+    
+    // seems to work the same with this, but going to leave it with what was written
+    // before
+    /*
+    var arr1 = _arr1;
+    var arr2 = _arr2;
+    */
+
+    // can this be written in a different way?
+    for (var i = 0; i < arr1.length; i++) {
+        if (arr1[i] !== arr2[i])
+            return false;
+    }
+    return true;
 }
-*/
 
 function lightOnOffAndAddButtonToList(b, arr) {
     // toggle on
@@ -73,41 +91,8 @@ buttons.forEach(function(button) {
     lightOnOffAndAddButtonToList(button, userButtonList); 
 });
 
-
 // add random button to light up list and console log the list every time
 // the test button is pressed
-
-
-// pulled this off stack overflow
-// seems to also check orders
-function arraysEqual(_arr1, _arr2) {
-
-    // looks like if array 1 is not an array, or array 2 is not an array, or if array 1 length
-    // is not equal to array two length, return false
-    if (!Array.isArray(_arr1) || ! Array.isArray(_arr2) || _arr1.length !== _arr2.length)
-      return false;
-
-    // new array 1 = array1 concatenated and sorted... I do not understand why this is happening
-    
-    var arr1 = _arr1.concat().sort();
-    var arr2 = _arr2.concat().sort();
-    
-
-    // seems to work the same with this, but going to leave it with what was written
-    // before
-    /*
-    var arr1 = _arr1;
-    var arr2 = _arr2;
-    */
-
-    // can this be written in a different way?
-    for (var i = 0; i < arr1.length; i++) {
-        if (arr1[i] !== arr2[i])
-            return false;
-    }
-    return true;
-}
-
 
 testButton.addEventListener('click', function() { 
     addButtonToLightUpList(buttons, lightUpList);
