@@ -1,3 +1,13 @@
+// turns out this is a really common one for people to code (of course) I just didn't check when
+// I had the idea. I just took a glance at a couple others. Seems like one thing I would benefit
+// from here is a state container. I refuse to look at other people solutions until I finish
+// mine.
+
+var gameState = {
+
+}
+
+
 // First, change the class of the quarters so that they light up to their
 // respective different colors, but only for a very limited time, then
 // the class will have to be removed and the colors will have to go back
