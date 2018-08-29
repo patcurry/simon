@@ -10,24 +10,29 @@ function toggleButtonColor(el) {
 
 // pulled this off stack overflow it checks if the arrays 
 // have the same elements in the same orders
+// this needs to be changed so that it gets the index of the button presses
+// as in one press is index of 0, then two presses is index of 1, etc.
+// then check that element, on the press, against the element of the same
+// index in array 2
 function arraysEqual(_arr1, _arr2) {
-
     // looks like if array 1 is not an array, or array 2 is not an array, or if array 1 length
     // is not equal to array two length, return false
     if (!Array.isArray(_arr1) || ! Array.isArray(_arr2) || _arr1.length !== _arr2.length)
       return false;
-
     // new array 1 = array1 concatenated and sorted... I do not understand why they are doing this.
     var arr1 = _arr1.concat().sort();
     var arr2 = _arr2.concat().sort();
-    
-    // can this be written in a different way?
-    // like without a for loop? maybe a .forEach statement
-    // and ternary operator... does it matter? no.
+
+    // for each element in the array, check if it is equal to the element of the same
+    // index in the other array
     for (var i = 0; i < arr1.length; i++) {
-        if (arr1[i] !== arr2[i])
+        if (arr1[i] !== arr2[i]) // <-- here's the important part of the function
             return false;
     }
+
+    // there needs to be an incrementer that can be used to check the correct element
+    // in another array, maybe there should just be an index as a third argument for this
+    // whole function
       
     return true;
 }
