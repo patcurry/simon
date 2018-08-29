@@ -8,13 +8,28 @@ function toggleButtonColor(el) {
     el.classList.toggle('light');
 }
 
-// how do I make a function that randomly selects one of the four
-// buttons, turns the light on and off, then waits, and on the next
-// time it is run it selects another button to light up, then another
-// and another, and so on
+// I need to have a button that adds elements to a list
+// then that list can be checked against the random button list
 
-// here's the random selector thing
-// var item = buttons[Math.floor(Math.random()*buttons.length)];
+// does this need to be a function?
+// no
+/*
+function addButtonToListOnPress(b, arr) {
+    return arr.push(b);
+}
+*/
+
+function lightOnOffAndAddButtonToList(b, arr) {
+    // toggle on
+    b.addEventListener('mousedown', function() {toggleButtonColor(b)});
+    // toggle off
+    b.addEventListener('mouseup', function() {toggleButtonColor(b)});
+    // add button to list
+    b.addEventListener('click', function() {
+        arr.push(b);
+        console.log(arr);
+    });
+}
 
 // this function should return one random item from an array
 function getRandButton(arr) {
@@ -39,18 +54,23 @@ var buttons = document.querySelectorAll('.quarter');
 
 // get test button
 var testButton = document.getElementById('test-button');
+var checkButton = document.getElementById('check-button');
 
 // make the list that will hold all the buttons in the right order
 // should it be something else? Is there an ordered list in JS?
 // this should be an ES6 Map object... how can I make that ok for 
 // old skool browsers?
 var lightUpList = [];
+var userButtonList = [];
 
 // only light up buttons when mouse is pressed on them (or keys, later)
 buttons.forEach(function(button) {
     // maybe these two things should be put into a single function
-    button.addEventListener('mousedown', function() {toggleButtonColor(button)});
-    button.addEventListener('mouseup', function() {toggleButtonColor(button)});
+    // with the add button to list thing
+//    button.addEventListener('mousedown', function() {toggleButtonColor(button)});
+//    button.addEventListener('mouseup', function() {toggleButtonColor(button)});
+ //   usersButtonList.push(button);
+    lightOnOffAndAddButtonToList(button, userButtonList); 
 });
 
 
@@ -58,8 +78,42 @@ buttons.forEach(function(button) {
 // the test button is pressed
 
 
+// pulled this off stack overflow
+// seems to also check orders
+function arraysEqual(_arr1, _arr2) {
+
+    // looks like if array 1 is not an array, or array 2 is not an array, or if array 1 length
+    // is not equal to array two length, return false
+    if (!Array.isArray(_arr1) || ! Array.isArray(_arr2) || _arr1.length !== _arr2.length)
+      return false;
+
+    // new array 1 = array1 concatenated and sorted... I do not understand why this is happening
+    
+    var arr1 = _arr1.concat().sort();
+    var arr2 = _arr2.concat().sort();
+    
+
+    // seems to work the same with this, but going to leave it with what was written
+    // before
+    /*
+    var arr1 = _arr1;
+    var arr2 = _arr2;
+    */
+
+    // can this be written in a different way?
+    for (var i = 0; i < arr1.length; i++) {
+        if (arr1[i] !== arr2[i])
+            return false;
+    }
+    return true;
+}
+
 
 testButton.addEventListener('click', function() { 
     addButtonToLightUpList(buttons, lightUpList);
     console.log(lightUpList);
+});
+
+checkButton.addEventListener('click', function() {
+    console.log(arraysEqual(lightUpList, userButtonList));
 });
