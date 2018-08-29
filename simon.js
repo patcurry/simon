@@ -3,20 +3,113 @@
 // from here is a state container. I refuse to look at other people solutions until I finish
 // mine.
 
+// What do I need to remember?
+// the elements
+// the order of the elements as they are selected randomly
+// i think that would also indicate the 
+
 var gameState = {
-
+    buttons: [], // populated by forEach query selector thing
+    simonsList: [], // this will hold the randomly selected list
+    userPressIndex: 0 // just going to increment this when the user hits buttons
 }
 
-
-// First, change the class of the quarters so that they light up to their
-// respective different colors, but only for a very limited time, then
-// the class will have to be removed and the colors will have to go back
-// to their original state
-function toggleButtonColor(el) {
-    // when the 'light' class is added the css takes care of the color
-    // the element will display
+function timedToggleClassOnAndOff(el) {
+    // toggle on
     el.classList.toggle('light');
+
+    // toggle off with anonymous function
+    setTimeout(function () {
+        el.classList.toggle('light');
+    }, 400);
 }
+
+// this function should return one random item from an array
+function getRandButton(arr) {
+    return arr[Math.floor(Math.random() * arr.length)]
+}
+
+// this function pushes the random button element from one list to
+// another list, does this need to be a function?
+function addButtonToSimonsList(fromArray, toArray) {
+    toArray.push(getRandButton(fromArray));
+}
+
+function incrementallyAddRandomButtonToList(fromArray, toArray) {
+    // get random button
+    var b = getRandButton(fromArray);
+    // add it to list
+    toArray.push(b);
+    // light it up for a little bit (and also play sound, when that is possible)
+    timedToggleClassOnAndOff(b);
+}
+
+
+
+// function to check if button is same as simonsList[index]
+function checkPressedButton(b) {
+    return b === gameState.simonsList[gameState.userPressIndexindex] ? true : false;
+}
+
+// I don't really want to take two arguements here...
+function lightOnOffAndIncrement(b, arr) {
+    // toggle 'light' class on
+    b.addEventListener('mousedown', function () {
+        b.classList.toggle('light');
+    });
+
+    // toggle 'light' class off
+    b.addEventListener('mouseup', function () {
+        b.classList.toggle('light');
+    });
+
+    // increment the userPressIndex
+    b.addEventListener('click', function () {
+        console.log(b);
+        //console.log(checkPressedButton(b));
+        gameState.userPressIndex++;
+    });
+}
+
+
+// get buttons
+gameState.buttons = document.querySelectorAll('.quarter');
+
+// get test button
+var testButton = document.getElementById('test-button');
+var checkButton = document.getElementById('check-button');
+
+
+// only light up buttons when mouse is pressed on them (or keys, later)
+gameState.buttons.forEach(function (button) {
+    lightOnOffAndIncrement(button);
+    // I don't like the way this is coded
+//    button.addEventListener('click', function() { 
+//       console.log(checkPressedButton(button, gameState.simonsList, gameState.userPressIndex));
+ //   });
+});
+
+
+// add random button to light up list and console log the list every time
+// the test button is pressed
+
+testButton.addEventListener('click', function () {
+    addButtonToSimonsList(gameState.buttons, gameState.simonsList);
+    console.log(gameState.simonsList);
+});
+
+// this doesn't work anymore because I've removed the check arrays against eachother
+// thing now it has to check if the element is the same as the one in the array
+// index
+checkButton.addEventListener('click', function () {
+    console.log(arraysEqual(gameState.simonsList, userButtonList));
+});
+
+
+
+
+
+
 
 // pulled this off stack overflow it checks if the arrays 
 // have the same elements in the same orders
@@ -27,8 +120,8 @@ function toggleButtonColor(el) {
 function arraysEqual(_arr1, _arr2) {
     // looks like if array 1 is not an array, or array 2 is not an array, or if array 1 length
     // is not equal to array two length, return false
-    if (!Array.isArray(_arr1) || ! Array.isArray(_arr2) || _arr1.length !== _arr2.length)
-      return false;
+    if (!Array.isArray(_arr1) || !Array.isArray(_arr2) || _arr1.length !== _arr2.length)
+        return false;
     // new array 1 = array1 concatenated and sorted... I do not understand why they are doing this.
     var arr1 = _arr1.concat().sort();
     var arr2 = _arr2.concat().sort();
@@ -43,97 +136,6 @@ function arraysEqual(_arr1, _arr2) {
     // there needs to be an incrementer that can be used to check the correct element
     // in another array, maybe there should just be an index as a third argument for this
     // whole function
-      
+
     return true;
 }
-
-// this function should return one random item from an array
-function getRandButton(arr) {
-    return arr[Math.floor(Math.random() * arr.length)]
-}
-
-// this function pushes the random button element from one list to
-// another list, does this need to be a function?
-function addButtonToLightUpList(fromArray, toArray) {
-    toArray.push(getRandButton(fromArray));
-}
-
-function clearLightUpList(arr) {
-    // this is not good functional programming, I should
-    // pop everything out of the list or something. Right now
-    // I'm just replacing the list with an empty list. 
-    return arr =[];
-}
-
-function timedToggleClassOnAndOff(el) {
-    // toggle on
-    toggleButtonColor(el);
-    // toggle off with anonymous function
-    setTimeout(function() {
-        toggleButtonColor(el)
-    }, 400);
-}
-
-// function that gets a random button to start, adds it to a list
-// lights up the button element for a little bit, then waits
-// for the user to start pressing buttons in the correct order
-function incrementallyAddRandomButtonToList(fromArray, toArray) {
-    // get random button
-    var b = getRandButton(fromArray);
-
-    // add it to list
-    toArray.push(b);
-
-    // light it up for a little bit (and also play sound, when that is possible)
-    timedToggleClassOnAndOff(b);
-}
-
-// I don't really want to take two arguements here...
-function lightOnOffAndAddButtonToList(b, arr) {
-    // toggle 'light' class on
-    b.addEventListener('mousedown', function() {toggleButtonColor(b)});
-    // toggle 'light' class off
-    b.addEventListener('mouseup', function() {toggleButtonColor(b)});
-    // add element to list
-    b.addEventListener('click', function() {
-        arr.push(b);
-        console.log(arr);
-    });
-}
-
-// get buttons
-var buttons = document.querySelectorAll('.quarter');
-
-// get test button
-var testButton = document.getElementById('test-button');
-var checkButton = document.getElementById('check-button');
-
-// make the list that will hold all the buttons in the right order
-// should it be something else? Is there an ordered list in JS?
-// this should be an ES6 Map object... how can I make that ok for 
-// old skool browsers?
-var lightUpList = [];
-var userButtonList = [];
-
-// only light up buttons when mouse is pressed on them (or keys, later)
-// is .forEach es6?
-buttons.forEach(function(button) {
-    // maybe these two things should be put into a single function
-    // with the add button to list thing
-//    button.addEventListener('mousedown', function() {toggleButtonColor(button)});
-//    button.addEventListener('mouseup', function() {toggleButtonColor(button)});
- //   usersButtonList.push(button);
-    lightOnOffAndAddButtonToList(button, userButtonList); 
-});
-
-// add random button to light up list and console log the list every time
-// the test button is pressed
-
-testButton.addEventListener('click', function() { 
-    addButtonToLightUpList(buttons, lightUpList);
-    console.log(lightUpList);
-});
-
-checkButton.addEventListener('click', function() {
-    console.log(arraysEqual(lightUpList, userButtonList));
-});
