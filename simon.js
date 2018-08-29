@@ -8,8 +8,8 @@ function toggleButtonColor(el) {
     el.classList.toggle('light');
 }
 
-// pulled this off stack overflow
-// also checks array order
+// pulled this off stack overflow it checks if the arrays 
+// have the same elements in the same orders
 function arraysEqual(_arr1, _arr2) {
 
     // looks like if array 1 is not an array, or array 2 is not an array, or if array 1 length
@@ -17,36 +17,19 @@ function arraysEqual(_arr1, _arr2) {
     if (!Array.isArray(_arr1) || ! Array.isArray(_arr2) || _arr1.length !== _arr2.length)
       return false;
 
-    // new array 1 = array1 concatenated and sorted... I do not understand why this is happening
-    
+    // new array 1 = array1 concatenated and sorted... I do not understand why they are doing this.
     var arr1 = _arr1.concat().sort();
     var arr2 = _arr2.concat().sort();
     
-    // seems to work the same with this, but going to leave it with what was written
-    // before
-    /*
-    var arr1 = _arr1;
-    var arr2 = _arr2;
-    */
-
     // can this be written in a different way?
+    // like without a for loop? maybe a .forEach statement
+    // and ternary operator... does it matter? no.
     for (var i = 0; i < arr1.length; i++) {
         if (arr1[i] !== arr2[i])
             return false;
     }
+      
     return true;
-}
-
-function lightOnOffAndAddButtonToList(b, arr) {
-    // toggle on
-    b.addEventListener('mousedown', function() {toggleButtonColor(b)});
-    // toggle off
-    b.addEventListener('mouseup', function() {toggleButtonColor(b)});
-    // add button to list
-    b.addEventListener('click', function() {
-        arr.push(b);
-        console.log(arr);
-    });
 }
 
 // this function should return one random item from an array
@@ -54,7 +37,7 @@ function getRandButton(arr) {
     return arr[Math.floor(Math.random() * arr.length)]
 }
 
-// this function pushes the random button from one list to
+// this function pushes the random button element from one list to
 // another list, does this need to be a function?
 function addButtonToLightUpList(fromArray, toArray) {
     toArray.push(getRandButton(fromArray));
@@ -65,6 +48,42 @@ function clearLightUpList(arr) {
     // pop everything out of the list or something. Right now
     // I'm just replacing the list with an empty list. 
     return arr =[];
+}
+
+function timedToggleClassOnAndOff(el) {
+    // toggle on
+    toggleButtonColor(el);
+    // toggle off with anonymous function
+    setTimeout(function() {
+        toggleButtonColor(el)
+    }, 400);
+}
+
+// function that gets a random button to start, adds it to a list
+// lights up the button element for a little bit, then waits
+// for the user to start pressing buttons in the correct order
+function incrementallyAddRandomButtonToList(fromArray, toArray) {
+    // get random button
+    var b = getRandButton(fromArray);
+
+    // add it to list
+    toArray.push(b);
+
+    // light it up for a little bit (and also play sound, when that is possible)
+    timedToggleClassOnAndOff(b);
+}
+
+// I don't really want to take two arguements here...
+function lightOnOffAndAddButtonToList(b, arr) {
+    // toggle 'light' class on
+    b.addEventListener('mousedown', function() {toggleButtonColor(b)});
+    // toggle 'light' class off
+    b.addEventListener('mouseup', function() {toggleButtonColor(b)});
+    // add element to list
+    b.addEventListener('click', function() {
+        arr.push(b);
+        console.log(arr);
+    });
 }
 
 // get buttons
@@ -82,6 +101,7 @@ var lightUpList = [];
 var userButtonList = [];
 
 // only light up buttons when mouse is pressed on them (or keys, later)
+// is .forEach es6?
 buttons.forEach(function(button) {
     // maybe these two things should be put into a single function
     // with the add button to list thing
