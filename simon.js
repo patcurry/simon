@@ -95,6 +95,8 @@ testButton.addEventListener('click', function () {
     gameState.userPressIndex = 0;
     addButtonToSimonsList(gameState.buttons, gameState.simonsList);
     console.log(gameState.simonsList);
+
+    gameState.simonsList.forEach(b => timedToggleClassOnAndOff(b))
 });
 
 // this doesn't work anymore because I've removed the check arrays against eachother
