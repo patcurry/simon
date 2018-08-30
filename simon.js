@@ -1,17 +1,16 @@
-// turns out this is a really common one for people to code (of course) I just didn't check when
-// I had the idea. I just took a glance at a couple others. Seems like one thing I would benefit
-// from here is a state container. I refuse to look at other people solutions until I finish
-// mine.
-
-// What do I need to remember?
-// the elements
-// the order of the elements as they are selected randomly
-// i think that would also indicate the 
-
 var gameState = {
-    buttons: [], // populated by forEach query selector thing
-    simonsList: [], // this will hold the randomly selected list
-    userPressIndex: 0 // just going to increment this when the user hits buttons
+    buttons: [],
+    simonsList: [],
+    round: 0,
+    userPressIndex: 0
+}
+
+// get buttons
+gameState.buttons = document.querySelectorAll('.quarter');
+
+
+function getRandButton(arr) {
+    return arr[Math.floor(Math.random() * arr.length)]
 }
 
 function timedToggleClassOnAndOff(el) {
@@ -24,18 +23,7 @@ function timedToggleClassOnAndOff(el) {
     }, 400);
 }
 
-// this function should return one random item from an array
-function getRandButton(arr) {
-    return arr[Math.floor(Math.random() * arr.length)]
-}
-
-// this function pushes the random button element from one list to
-// another list, does this need to be a function?
 function addButtonToSimonsList(fromArray, toArray) {
-    toArray.push(getRandButton(fromArray));
-}
-
-function incrementallyAddRandomButtonToList(fromArray, toArray) {
     // get random button
     var b = getRandButton(fromArray);
     // add it to list
@@ -44,15 +32,29 @@ function incrementallyAddRandomButtonToList(fromArray, toArray) {
     timedToggleClassOnAndOff(b);
 }
 
+// pretty bad can be refactored i guess
+// calls new game
+function newGame() {
+    // reset game
+    gameState.simonsList = [];
+    gameState.round = 0;
+    gameState.userPressIndex = 0;
+
+    // add one button to simon's list and light it up
+    addButtonToSimonsList(gameState.buttons, gameState.simonsList);
+
+    console.log('new game', gameState.simonsList);
+}
+
 
 
 // function to check if button is same as simonsList[index]
 function checkPressedButton(b) {
-    return b === gameState.simonsList[gameState.userPressIndexindex] ? true : false;
+    return b === gameState.simonsList[gameState.userPressIndex] ? true : false;
 }
 
 // I don't really want to take two arguements here...
-function lightOnOffAndIncrement(b, arr) {
+function lightOnOffAndIncrement(b) {
     // toggle 'light' class on
     b.addEventListener('mousedown', function () {
         b.classList.toggle('light');
@@ -65,15 +67,11 @@ function lightOnOffAndIncrement(b, arr) {
 
     // increment the userPressIndex
     b.addEventListener('click', function () {
-        console.log(b);
-        //console.log(checkPressedButton(b));
+        console.log(checkPressedButton(b));
         gameState.userPressIndex++;
     });
 }
 
-
-// get buttons
-gameState.buttons = document.querySelectorAll('.quarter');
 
 // get test button
 var testButton = document.getElementById('test-button');
@@ -82,18 +80,19 @@ var checkButton = document.getElementById('check-button');
 
 // only light up buttons when mouse is pressed on them (or keys, later)
 gameState.buttons.forEach(function (button) {
+    //checkPressedButton(button);
     lightOnOffAndIncrement(button);
-    // I don't like the way this is coded
-//    button.addEventListener('click', function() { 
-//       console.log(checkPressedButton(button, gameState.simonsList, gameState.userPressIndex));
- //   });
 });
 
 
-// add random button to light up list and console log the list every time
-// the test button is pressed
-
+// the game is set with this. make this stuff into function that gets called
+// when the user press index is the length - 1 of simon's list
 testButton.addEventListener('click', function () {
+    // increment round
+    gameState.round = 1;
+
+    // reset user press index
+    gameState.userPressIndex = 0;
     addButtonToSimonsList(gameState.buttons, gameState.simonsList);
     console.log(gameState.simonsList);
 });
@@ -107,7 +106,7 @@ checkButton.addEventListener('click', function () {
 
 
 
-
+newGame();
 
 
 
